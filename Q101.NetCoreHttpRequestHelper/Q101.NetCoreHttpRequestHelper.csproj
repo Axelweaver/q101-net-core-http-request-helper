@@ -2,6 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Company>Q101</Company>
+    <Authors>Aleksei Tkachev, Alex Bondarenko</Authors>
+    <Description>Helper class library for send http requests</Description>
+    <Copyright>Q101</Copyright>
+    <PackageProjectUrl>https://github.com/Axelweaver/q101-het-core-http-request-helper</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Axelweaver/q101-het-core-http-request-helper</RepositoryUrl>
+    <RepositoryType>https://github.com/Axelweaver/q101-het-core-http-request-helper</RepositoryType>
+    <PackageTags>HttpClient, Http, Http request</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
