@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Q101.NetCoreHttpRequestHelper.Abstract;
 using Q101.NetCoreHttpRequestHelper.Concrete;
 using Q101.NetCoreHttpRequestHelper.Converters.Abstract;
+using Q101.NetCoreHttpRequestHelper.Converters.Concrete;
 
 namespace Q101.NetCoreHttpRequestHelper.Extensions
 {
@@ -20,7 +21,8 @@ namespace Q101.NetCoreHttpRequestHelper.Extensions
         public static IServiceCollection RegisterHttpRequestHelper(this IServiceCollection services,
                                                                    bool disableSslCheck = false)
         {
-            services.AddScoped<IJsonConverterAdapter, IJsonConverterAdapter>();
+            services.AddSingleton<IJsonConverterAdapter, IJsonConverterAdapter>();
+            services.AddSingleton<IXmlConverter, XmlConverter>();
 
             if (!disableSslCheck)
             {
