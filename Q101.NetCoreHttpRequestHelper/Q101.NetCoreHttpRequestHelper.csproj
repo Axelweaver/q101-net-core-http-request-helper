@@ -11,11 +11,11 @@
     <RepositoryType>https://github.com/Axelweaver/q101-het-core-http-request-helper</RepositoryType>
     <PackageTags>HttpClient, Http, Http request</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.0.1.0</AssemblyVersion>
-    <FileVersion>1.0.1.0</FileVersion>
+    <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <FileVersion>1.0.2.0</FileVersion>
     <NeutralLanguage>en-150</NeutralLanguage>
-    <PackageReleaseNotes>Add patch, add common send request, add xml support</PackageReleaseNotes>
-    <Version>1.0.1</Version>
+    <PackageReleaseNotes>Fix some bugs. Add stream and bytes array support</PackageReleaseNotes>
+    <Version>1.0.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
