@@ -1,6 +1,7 @@
 ﻿using System;
 using Q101.NetCoreHttpRequestHelper.Abstract;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,13 +46,14 @@ namespace Q101.NetCoreHttpRequestHelper.Concrete
 
 
         /// <inheritdoc />
-        public async Task<T> SendJsonAsync<T>(string url, 
-                                              object body = null, 
-                                              Encoding encoding = null, 
-                                              Dictionary<string, string> headers = null)
+        public async Task<T> SendAsync<T>(ContentTypes contentType,
+                                          string url, 
+                                          object body = null, 
+                                          Encoding encoding = null, 
+                                          Dictionary<string, string> headers = null)
         {
             return await _requestSender.SendRequestAsync<T>(_httpClientFunc, 
-                                                            ContentTypes.Json,
+                                                            contentType,
                                                             _httpMethod,
                                                             url,
                                                             body,
@@ -60,47 +62,50 @@ namespace Q101.NetCoreHttpRequestHelper.Concrete
         }
 
         /// <inheritdoc />
-        public async Task SendJsonAsync(string url,
-                                        object body = null,
-                                        Encoding encoding = null,
-                                        Dictionary<string, string> headers = null)
+        public async Task SendAsync(ContentTypes contentType,
+                                    string url,
+                                    object body = null,
+                                    Encoding encoding = null,
+                                    Dictionary<string, string> headers = null)
         {
             await _requestSender.SendRequestAsync<object>(_httpClientFunc,
-                                                          ContentTypes.Json,
+                                                          contentType,
                                                           _httpMethod,
                                                           url,
                                                           body,
                                                           encoding,
                                                           headers);
-        }
-        /// <inheritdoc />
-        public async Task<T> SendXmlAsync<T>(string url, 
-                                              object body = null, 
-                                              Encoding encoding = null, 
-                                              Dictionary<string, string> headers = null)
-        {
-            return await _requestSender.SendRequestAsync<T>(_httpClientFunc, 
-                                                            ContentTypes.Xml,
-                                                            _httpMethod,
-                                                            url,
-                                                            body,
-                                                            encoding,
-                                                            headers);
         }
 
-        /// <inheritdoc />
-        public async Task SendXmlAsync(string url,
-                                        object body = null,
-                                        Encoding encoding = null,
-                                        Dictionary<string, string> headers = null)
+        public async Task<Stream> SendWithStreamResponse(ContentTypes contentType, 
+                                                         string url,
+                                                         object body = null,
+                                                         Encoding encoding = null,
+                                                         Dictionary<string, string> headers = null)
         {
-            await _requestSender.SendRequestAsync<object>(_httpClientFunc,
-                                                          ContentTypes.Xml,
-                                                          _httpMethod,
-                                                          url,
-                                                          body,
-                                                          encoding,
-                                                          headers);
+            return await _requestSender.SendRequestWithStreamResponseAsync(_httpClientFunc,
+                                                                           contentType,
+                                                                           url,
+                                                                           _httpMethod,
+                                                                           body,
+                                                                           encoding,
+                                                                           headers);
+        }
+
+        public async Task<byte[]> SendWithBytesResponse(ContentTypes contentType, 
+                                                        string url,
+                                                        object body = null,
+                                                        Encoding encoding = null,
+                                                        Dictionary<string, string> headers = null)
+        {
+           return await _requestSender.SendRequestWithBytesResponseAsync(_httpClientFunc,
+                                                                         contentType,
+                                                                         url,
+                                                                         _httpMethod,
+                                                                         body,
+                                                                         encoding,
+                                                                         headers);
+
         }
     }
 }

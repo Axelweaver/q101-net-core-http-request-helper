@@ -21,7 +21,7 @@ namespace Q101.NetCoreHttpRequestHelper.Extensions
         public static IServiceCollection RegisterHttpRequestHelper(this IServiceCollection services,
                                                                    bool disableSslCheck = false)
         {
-            services.AddSingleton<IJsonConverterAdapter, IJsonConverterAdapter>();
+            services.AddSingleton<IJsonConverterAdapter, JsonConverterAdapter>();
             services.AddSingleton<IXmlConverter, XmlConverter>();
 
             if (!disableSslCheck)

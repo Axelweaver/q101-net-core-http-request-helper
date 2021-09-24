@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,6 +43,8 @@ namespace Q101.NetCoreHttpRequestHelper.Concrete
 
         #endregion
 
+        #region public methods
+
         /// <inheritdoc />
         public async Task<T> SendRequestAsync<T>(Func<HttpClient> httpClientFunc,
                                                  ContentTypes contentType,
@@ -48,10 +52,10 @@ namespace Q101.NetCoreHttpRequestHelper.Concrete
                                                  string url,
                                                  object body = null,
                                                  Encoding encoding= null,
-                                                 Dictionary<string, string> headers = null)
+                                                 IDictionary<string, string> headers = null)
         {
             var httpClient = httpClientFunc();
-            var requestMessage = GetRequestWithStringContent(contentType, 
+            var requestMessage = GetRequestContent(contentType, 
                                                              url, 
                                                              method, 
                                                              body, 
@@ -63,6 +67,62 @@ namespace Q101.NetCoreHttpRequestHelper.Concrete
             return result;
         }
 
+        /// <inheritdoc />
+        public async Task<Stream> SendRequestWithStreamResponseAsync(Func<HttpClient> httpClientFunc,
+                                                                     ContentTypes contentType,
+                                                                     string url,
+                                                                     HttpMethod method,
+                                                                     object body = null,
+                                                                     Encoding encoding = null,
+                                                                     IDictionary<string, string> headers = null)
+        {
+            var httpClient = httpClientFunc();
+
+            var requestMessage = GetRequestContent(contentType,
+                                                   url,
+                                                   method,
+                                                   body,
+                                                   encoding,
+                                                   headers);
+
+            var response = await httpClient.SendAsync(requestMessage);
+            response.EnsureSuccessStatusCode();
+
+            var result = await response.Content.ReadAsStreamAsync();
+
+            return result;
+        }
+
+        /// <inheritdoc />
+        public async Task<byte[]> SendRequestWithBytesResponseAsync(Func<HttpClient> httpClientFunc,
+                                                                    ContentTypes contentType,
+                                                                    string url,
+                                                                    HttpMethod method,
+                                                                    object body = null,
+                                                                    Encoding encoding = null,
+                                                                    IDictionary<string, string> headers = null)
+        {
+            var httpClient = httpClientFunc();
+
+            var requestMessage = GetRequestContent(contentType,
+                                                   url,
+                                                   method,
+                                                   body,
+                                                   encoding,
+                                                   headers);
+
+            var response = await httpClient.SendAsync(requestMessage);
+            response.EnsureSuccessStatusCode();
+
+            var result = await response.Content.ReadAsByteArrayAsync();
+
+            return result;
+        }
+
+        #endregion
+
+        #region private methods
+
         /// <summary>
         /// Get http request message with string body content.
         /// </summary>
@@ -73,30 +133,33 @@ namespace Q101.NetCoreHttpRequestHelper.Concrete
         /// <param name="encoding">Request body content encoding.</param>
         /// <param name="headers">Additional request headers.</param>
         /// <returns></returns>
-        private HttpRequestMessage GetRequestWithStringContent(ContentTypes contentType, 
-                                                               string url, 
-                                                               HttpMethod method, 
-                                                               object body = null,
-                                                               Encoding encoding = null,
-                                                               Dictionary<string, string> headers = null)
+        private HttpRequestMessage GetRequestContent(ContentTypes contentType, 
+                                                     string url, 
+                                                     HttpMethod method, 
+                                                     object body = null,
+                                                     Encoding encoding = null,
+                                                     IDictionary<string, string> headers = null)
         {
             var requestMessage = new HttpRequestMessage(method, url);
 
-            if (headers != null)
-            {
-                foreach (var pair in headers)
-                {
-                    if (requestMessage.Headers.Contains(pair.Key))
-                    {
-                        requestMessage.Headers.Remove(pair.Key);
-                    }
-
-                    requestMessage.Headers.Add(pair.Key, pair.Value);
-                }
-            }
+            AddRequestHeaders(requestMessage, headers);
 
             if (body == null)
             {
+                return requestMessage;
+            }
+
+            if (contentType == ContentTypes.Stream)
+            {
+                requestMessage.Content = new StreamContent((Stream)body);
+
+                return requestMessage;
+            }
+
+            if (contentType == ContentTypes.Bytes)
+            {
+                requestMessage.Content = new ByteArrayContent((byte[])body);
+
                 return requestMessage;
             }
 
@@ -120,6 +183,30 @@ namespace Q101.NetCoreHttpRequestHelper.Concrete
         }
 
         /// <summary>
+        /// Add headers to http request.
+        /// </summary>
+        /// <param name="requestMessage">Http request message.</param>
+        /// <param name="headers">headers collection</param>
+        private void AddRequestHeaders(HttpRequestMessage requestMessage, 
+                                       IDictionary<string, string> headers)
+        {
+            if (headers == null || !headers.Any())
+            {
+                return;
+            }
+
+            foreach (var pair in headers)
+            {
+                if (requestMessage.Headers.Contains(pair.Key))
+                {
+                    requestMessage.Headers.Remove(pair.Key);
+                }
+
+                requestMessage.Headers.Add(pair.Key, pair.Value);
+            }
+        }
+
+        /// <summary>
         /// Get deserialized object from http request.
         /// </summary>
         /// <typeparam name="T">Response object type.</typeparam>
@@ -127,14 +214,14 @@ namespace Q101.NetCoreHttpRequestHelper.Concrete
         /// <param name="request">Http request message.</param>
         /// <param name="contentType">Http response content type</param>
         /// <returns></returns>
-        public async Task<T> GetResponseObject<T>(HttpClient httpClient, 
+        private async Task<T> GetResponseObject<T>(HttpClient httpClient, 
                                                   HttpRequestMessage request, 
                                                   ContentTypes contentType)
         {
             var response = await httpClient.SendAsync(request);
-            var content = await response.Content.ReadAsStringAsync();
-
             response.EnsureSuccessStatusCode();
+
+            var content = await response.Content.ReadAsStringAsync();
 
             var result = DeserializeContentString<T>(contentType, content);
 
@@ -161,5 +248,8 @@ namespace Q101.NetCoreHttpRequestHelper.Concrete
 
             return result;
         }
+
+        #endregion
+
     }
 }
