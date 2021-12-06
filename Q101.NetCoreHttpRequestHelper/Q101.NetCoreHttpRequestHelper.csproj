@@ -11,14 +11,11 @@
     <RepositoryType>https://github.com/Axelweaver/q101-het-core-http-request-helper</RepositoryType>
     <PackageTags>HttpClient, Http, Http request</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.0.3.0</AssemblyVersion>
-    <FileVersion>1.0.3.0</FileVersion>
+    <AssemblyVersion>1.0.4.0</AssemblyVersion>
+    <FileVersion>1.0.4.0</FileVersion>
     <NeutralLanguage>en-150</NeutralLanguage>
-    <PackageReleaseNotes>Simplified code;
-Reworked content type methods call;
-Reworked response result retrieve;
-Edited comments.</PackageReleaseNotes>
-    <Version>1.0.3</Version>
+    <PackageReleaseNotes>Fix UseCamelCase, DefaultEncoding for v2.</PackageReleaseNotes>
+    <Version>1.0.4</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
