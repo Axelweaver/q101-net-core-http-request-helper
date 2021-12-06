@@ -27,14 +27,9 @@ namespace Q101.NetCoreHttpRequestHelper
         private readonly ContentTypes _contentType;
 
         /// <summary>
-        /// Default content encoding;
+        /// Helper request options.
         /// </summary>
-        private readonly Encoding _defaultEncoding;
-
-        /// <summary>
-        /// Use camel case on serialization.
-        /// </summary>
-        private readonly bool _useCamelCase;
+        private readonly HttpRequestHelperOptions _requestOptions;
 
         /// <summary>
         /// JSON converter.
@@ -54,15 +49,13 @@ namespace Q101.NetCoreHttpRequestHelper
         public HttpContentSender(
             Func<HttpClient> clientProviderFunc,
             ContentTypes contentType,
-            Encoding defaultEncoding,
-            bool useCamelCase,
+            HttpRequestHelperOptions requestOptions,
             IJsonConverter jsonConverter,
             IXmlConverter xmlConverter)
         {
             _httpClientProviderFunc = clientProviderFunc;
             _contentType = contentType;
-            _defaultEncoding = defaultEncoding ?? Encoding.UTF8;
-            _useCamelCase = useCamelCase;
+            _requestOptions = requestOptions;
             _jsonConverter = jsonConverter;
             _xmlConverter = xmlConverter;
         }
@@ -143,7 +136,7 @@ namespace Q101.NetCoreHttpRequestHelper
 
             var responseWrapper = new HttpRequestHelperResponse(
                 response,
-                _useCamelCase,
+                _requestOptions.UseCamelCase,
                 _jsonConverter,
                 _xmlConverter);
 
@@ -166,7 +159,7 @@ namespace Q101.NetCoreHttpRequestHelper
             Dictionary<string, string> headers = null,
             Encoding encoding = null)
         {
-            encoding ??= _defaultEncoding;
+            encoding ??= _requestOptions.DefaultEncoding;
 
             var requestMessage = new HttpRequestMessage(method, url);
 
@@ -177,7 +170,7 @@ namespace Q101.NetCoreHttpRequestHelper
                 {
                     case ContentTypes.Json:
                         {
-                            var json = _useCamelCase
+                            var json = _requestOptions.UseCamelCase
                                 ? _jsonConverter.SerializeCamelCase(content)
                                 : _jsonConverter.Serialize(content);
 
