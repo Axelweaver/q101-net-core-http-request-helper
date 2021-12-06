@@ -14,7 +14,10 @@
     <AssemblyVersion>1.0.3.0</AssemblyVersion>
     <FileVersion>1.0.3.0</FileVersion>
     <NeutralLanguage>en-150</NeutralLanguage>
-    <PackageReleaseNotes>Fix some bugs. Add stream and bytes array support</PackageReleaseNotes>
+    <PackageReleaseNotes>Simplified code;
+Reworked content type methods call;
+Reworked response result retrieve;
+Edited comments.</PackageReleaseNotes>
     <Version>1.0.3</Version>
   </PropertyGroup>
 
