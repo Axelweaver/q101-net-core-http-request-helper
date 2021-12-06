@@ -1,13 +1,12 @@
-﻿namespace Q101.NetCoreHttpRequestHelper.Enums
+﻿namespace Q101.NetCoreHttpRequestHelper
 {
     /// <summary>
-    /// Http request body content types
+    /// HttpRequestHelper content types.
     /// </summary>
     public enum ContentTypes
     {
         Json,
         Xml,
-        Stream,
-        Bytes
+        Stream
     }
 }

@@ -4,11 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
-using Q101.NetCoreHttpRequestHelper.Converters.Abstract;
 
-namespace Q101.NetCoreHttpRequestHelper.Converters.Concrete
+namespace Q101.NetCoreHttpRequestHelper.Converters
 {
-    /// <inheritdoc />
+    /// <summary>
+    /// Xml serialization converter.
+    /// </summary>
     public class XmlConverter : IXmlConverter
     {
         /// <inheritdoc />
@@ -108,9 +109,7 @@ namespace Q101.NetCoreHttpRequestHelper.Converters.Concrete
             return result;
         }
 
-        /// <summary>
-        /// Deserialize.
-        /// </summary>
+        /// <inheritdoc />
         private T Deserialize<T>(XmlSerializer serializer, string xml)
         {
             try
@@ -131,7 +130,7 @@ namespace Q101.NetCoreHttpRequestHelper.Converters.Concrete
         }
 
         /// <summary>
-        /// Get children exceptions string.
+        /// Get combined error string for exception and inner exceptions.
         /// </summary>
         private string GetInnerExceptionMessages(Exception exc, string messageStart = "")
         {

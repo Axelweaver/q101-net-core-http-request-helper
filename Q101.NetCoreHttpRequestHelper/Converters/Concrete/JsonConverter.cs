@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Q101.NetCoreHttpRequestHelper.Converters.Abstract;
 
-namespace Q101.NetCoreHttpRequestHelper.Converters.Concrete
+namespace Q101.NetCoreHttpRequestHelper.Converters
 {
-    /// <inheritdoc />
-    public class JsonConverterAdapter : IJsonConverterAdapter
+    /// <summary>
+    /// JSON converter.
+    /// </summary>
+    public class JsonConverter : IJsonConverter
     {
         /// <inheritdoc />
         public string Serialize<T>(T obj)
@@ -26,6 +27,14 @@ namespace Q101.NetCoreHttpRequestHelper.Converters.Concrete
 
         /// <inheritdoc />
         public T Deserialize<T>(string json)
+        {
+            T result = JsonConvert.DeserializeObject<T>(json);
+
+            return result;
+        }
+
+        /// <inheritdoc />
+        public T DeserializeCamelCase<T>(string json)
         {
             T result = JsonConvert.DeserializeObject<T>(json);
 

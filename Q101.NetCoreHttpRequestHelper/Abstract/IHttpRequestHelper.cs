@@ -1,80 +1,73 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
-using Q101.NetCoreHttpRequestHelper.Enums;
 
-namespace Q101.NetCoreHttpRequestHelper.Abstract
+namespace Q101.NetCoreHttpRequestHelper
 {
     /// <summary>
-    /// Http request helper
+    /// Http request sending helper.
     /// </summary>
     public interface IHttpRequestHelper
     {
         /// <summary>
-        /// Using serialization by camel case
-        /// </summary>
-        bool UseCamelCase { get; set; }
-
-        /// <summary>
-        /// Default http request headers
+        /// Headers added to requests by default.
         /// </summary>
         Dictionary<string, string> DefaultHeaders { get; set; }
 
         /// <summary>
-        /// Send request GET method
+        /// Requests encoding by default (UTF-8 if unset).
         /// </summary>
-        public IHttpRequestSpecificTypeSender Get { get; }
+        public Encoding DefaultEncoding { get; set; }
 
         /// <summary>
-        /// Send request POST method
+        /// HttpClient used by service.
         /// </summary>
-        public IHttpRequestSpecificTypeSender Post { get; }
+        HttpClient HttpClient { get; }
 
         /// <summary>
-        /// Send request PUT method
+        /// Use camel case on serialization.
         /// </summary>
-        public IHttpRequestSpecificTypeSender Put { get; }
+        bool UseCamelCase { get; set; }
 
         /// <summary>
-        /// Send request DELETE method
+        /// Add Authorization header to requests.
         /// </summary>
-        public IHttpRequestSpecificTypeSender Delete { get; }
+        /// <param name="value">Header value.</param>
+        void UseAuthorizationHeader(string value);
 
         /// <summary>
-        /// Send request PATCH method
+        /// Add basic authorization header to requests.
         /// </summary>
-        public IHttpRequestSpecificTypeSender Patch { get; }
+        /// <param name="login">Basic auth login.</param>
+        /// <param name="password">Basic auth password.</param>
+        void UseBasicAuthorizationHeader(string login, string password);
 
         /// <summary>
-        /// Set Basic Authorization credentials.
+        /// Add Token authorization header to requests.
         /// </summary>
-        /// <param name="login">User name</param>
-        /// <param name="password">password</param>
-        void SetAuthorizationHeader(string login, string password);
+        /// <param name="token">Token value.</param>
+        void UseTokenAuthorizationHeader(string token);
 
         /// <summary>
-        /// Set bearer token header Authorization.
+        /// Add Bearer token authorization header to requests.
         /// </summary>
-        /// <param name="token">Auth token.</param>
-        void SetAuthorizationHeader(string token);
+        /// <param name="token">Bearer token value.</param>
+        void UseJwtTokenAuthorizationHeader(string token);
 
         /// <summary>
-        /// Send http request
+        /// Send request using JSON object content.
         /// </summary>
-        /// <typeparam name="T">Request body object type.</typeparam>
-        /// <param name="contentType">Request body content type.</param>
-        /// <param name="method">Http request method.</param>
-        /// <param name="url">Http request url.</param>
-        /// <param name="body">Http request body.</param>
-        /// <param name="encoding">Http request body content encoding.</param>
-        /// <param name="headers">Additional http request headers.</param>
-        /// <returns></returns>
-        Task<T> SendRequestAsync<T>(ContentTypes contentType,
-                                    HttpMethod method,
-                                    string url,
-                                    object body = null,
-                                    Encoding encoding = null,
-                                    Dictionary<string, string> headers = null);
+        public IHttpContentSender<object> Json { get; }
+
+        /// <summary>
+        /// Send request using XML object content.
+        /// </summary>
+        public IHttpContentSender<object> Xml { get; }
+
+        /// <summary>
+        /// Send request using stream content.
+        /// </summary>
+        public IHttpContentSender<Stream> Stream { get; }
     }
 }

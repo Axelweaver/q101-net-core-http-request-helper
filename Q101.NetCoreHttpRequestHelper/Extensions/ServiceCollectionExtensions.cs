@@ -1,27 +1,24 @@
-﻿using System.Net.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Q101.NetCoreHttpRequestHelper.Abstract;
-using Q101.NetCoreHttpRequestHelper.Concrete;
-using Q101.NetCoreHttpRequestHelper.Converters.Abstract;
-using Q101.NetCoreHttpRequestHelper.Converters.Concrete;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Q101.NetCoreHttpRequestHelper.Converters;
+using System.Net.Http;
 
-namespace Q101.NetCoreHttpRequestHelper.Extensions
+namespace Q101.NetCoreHttpRequestHelper
 {
     /// <summary>
-    /// Service collection extensions
+    /// Service collection extensions.
     /// </summary>
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Register http request helper
+        /// Add IHttpRequestHelper dependencies to service collection.
         /// </summary>
-        /// <param name="services"></param>
-        /// <param name="disableSslCheck"></param>
-        /// <returns></returns>
-        public static IServiceCollection RegisterHttpRequestHelper(this IServiceCollection services,
-                                                                   bool disableSslCheck = false)
+        /// <param name="services">Service collection.</param>
+        /// <param name="disableSslCheck">Disable SSL check for helper requests.</param>
+        public static IServiceCollection AddHttpRequestHelper(
+            this IServiceCollection services,
+            bool disableSslCheck = false)
         {
-            services.AddSingleton<IJsonConverterAdapter, JsonConverterAdapter>();
+            services.AddSingleton<IJsonConverter, JsonConverter>();
             services.AddSingleton<IXmlConverter, XmlConverter>();
 
             if (!disableSslCheck)
@@ -31,7 +28,6 @@ namespace Q101.NetCoreHttpRequestHelper.Extensions
                 return services;
             }
 
-            // RequestService HttpClient instance injection.
             services.AddHttpClient<IHttpRequestHelper, HttpRequestHelper>()
                 .ConfigurePrimaryHttpMessageHandler(() => {
                     // Disable SSL check.

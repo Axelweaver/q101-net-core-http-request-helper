@@ -1,84 +1,116 @@
-﻿using System;
+﻿using Q101.NetCoreHttpRequestHelper.Converters;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
-using Q101.NetCoreHttpRequestHelper.Abstract;
-using Q101.NetCoreHttpRequestHelper.Converters.Abstract;
-using Q101.NetCoreHttpRequestHelper.Enums;
 
-namespace Q101.NetCoreHttpRequestHelper.Concrete
+namespace Q101.NetCoreHttpRequestHelper
 {
-    /// <inheritdoc />
+    /// <summary>
+    /// Http request sending helper.
+    /// </summary>
     public class HttpRequestHelper : IHttpRequestHelper
     {
-        /// <inheritdoc />
-        public bool UseCamelCase { get; set; } = false;
+        #region private props
+
+        /// <summary>
+        /// JSON converter.
+        /// </summary>
+        private readonly IJsonConverter _jsonConverter;
+
+        /// <summary>
+        /// Xml converter.
+        /// </summary>
+        private readonly IXmlConverter _xmlConverter;
+
+        /// <summary>
+        /// Authentication header.
+        /// </summary>
+        private AuthenticationHeaderValue _authenticationHeader;
+
+        /// <summary>
+        /// Custom token Authentication header.
+        /// </summary>
+        private KeyValuePair<string, string> _customAuthorizationHeader;
+
+        #endregion
 
         /// <inheritdoc />
         public Dictionary<string, string> DefaultHeaders { get; set; }
 
-        #region privates
-
-        // http client
-        private readonly HttpClient _httpClient;
-
-        // http request sender
-        private readonly IHttpRequestSender _requestSender;
-
-        /// Authentication header
-        private AuthenticationHeaderValue _authenticationHeader;
-
-        #endregion
-
-        #region public properties
+        /// <inheritdoc />
+        public Encoding DefaultEncoding { get; set; }
 
         /// <inheritdoc />
-        public IHttpRequestSpecificTypeSender Get { get; }
+        public HttpClient HttpClient { get; }
 
         /// <inheritdoc />
-        public IHttpRequestSpecificTypeSender Post { get; }
+        public bool UseCamelCase { get; set; }
 
         /// <inheritdoc />
-        public IHttpRequestSpecificTypeSender Put { get; }
+        public IHttpContentSender<object> Json { get; }
 
         /// <inheritdoc />
-        public IHttpRequestSpecificTypeSender Delete { get; }
+        public IHttpContentSender<object> Xml { get; }
 
         /// <inheritdoc />
-        public IHttpRequestSpecificTypeSender Patch { get; }
+        public IHttpContentSender<Stream> Stream { get; }
 
-        #endregion
-
-        #region ctor
+        #region constructor
 
         /// <summary>
-        /// ctor.
+        /// Http request sending helper.
         /// </summary>
-        public HttpRequestHelper(IJsonConverterAdapter jsonConverter,
-                                 IXmlConverter xmlConverter,
-                                 HttpClient httpClient)
+        public HttpRequestHelper(
+            HttpClient httpClient,
+            IJsonConverter jsonConverter,
+            IXmlConverter xmlConverter)
         {
-            _httpClient = httpClient;
+            DefaultHeaders = new Dictionary<string, string>();
+            DefaultEncoding = Encoding.UTF8;
+            HttpClient = httpClient;
 
-            Func<HttpClient> httpClientFunc = ConfigureHttpClient;
+            _jsonConverter = jsonConverter;
+            _xmlConverter = xmlConverter;
 
-            _requestSender = new HttpRequestSender(jsonConverter, xmlConverter, UseCamelCase);
+            Json = new HttpContentSender<object>(
+                ConfigureHttpClient,
+                ContentTypes.Json,
+                DefaultEncoding,
+                UseCamelCase,
+                _jsonConverter,
+                _xmlConverter);
 
-            Get = new HttpRequestSpecificTypeSender(httpClientFunc, _requestSender, HttpMethod.Get);
-            Post = new HttpRequestSpecificTypeSender(httpClientFunc, _requestSender, HttpMethod.Post);
-            Put = new HttpRequestSpecificTypeSender(httpClientFunc, _requestSender, HttpMethod.Put);
-            Delete = new HttpRequestSpecificTypeSender(httpClientFunc, _requestSender, HttpMethod.Delete);
-            Patch = new HttpRequestSpecificTypeSender(httpClientFunc, _requestSender, HttpMethod.Patch);
+            Xml = new HttpContentSender<object>(
+                ConfigureHttpClient,
+                ContentTypes.Xml,
+                DefaultEncoding,
+                UseCamelCase,
+                _jsonConverter,
+                _xmlConverter);
+
+            Stream = new HttpContentSender<Stream>(
+                ConfigureHttpClient,
+                ContentTypes.Stream,
+                DefaultEncoding,
+                UseCamelCase,
+                _jsonConverter,
+                _xmlConverter);
         }
 
         #endregion
 
-        #region public methods
+        /// <inheritdoc />
+        public void UseAuthorizationHeader(string value)
+        {
+            _customAuthorizationHeader = new KeyValuePair<string, string>
+                ("Authorization", value);
+        }
 
         /// <inheritdoc />
-        public void SetAuthorizationHeader(string login, string password)
+        public void UseBasicAuthorizationHeader(string login, string password)
         {
             _authenticationHeader = new AuthenticationHeaderValue(
                 "Basic",
@@ -86,56 +118,46 @@ namespace Q101.NetCoreHttpRequestHelper.Concrete
         }
 
         /// <inheritdoc />
-        public void SetAuthorizationHeader(string token)
+        public void UseTokenAuthorizationHeader(string token)
         {
             _authenticationHeader = new AuthenticationHeaderValue("Token", token);
         }
 
         /// <inheritdoc />
-        public async Task<T> SendRequestAsync<T>(ContentTypes contentType,
-                                                 HttpMethod method,
-                                                 string url,
-                                                 object body = null,
-                                                 Encoding encoding = null,
-                                                 Dictionary<string, string> headers = null)
+        public void UseJwtTokenAuthorizationHeader(string token)
         {
-            return await _requestSender.SendRequestAsync<T>(ConfigureHttpClient,
-                                                            contentType,
-                                                            method, 
-                                                            url, 
-                                                            body, 
-                                                            encoding, 
-                                                            headers);
-        }        
-
-        #endregion
-
+            _customAuthorizationHeader = new KeyValuePair<string, string>
+                ("Authorization", $"Bearer {token}");
+        }
 
         /// <summary>
-        /// Http client configure.
+        /// Apply helper configuration to HttpClient.
         /// </summary>
         private HttpClient ConfigureHttpClient()
         {
             if (_authenticationHeader != null)
             {
-                _httpClient.DefaultRequestHeaders.Authorization = _authenticationHeader;
+                HttpClient.DefaultRequestHeaders.Authorization = _authenticationHeader;
             }
 
-            foreach (var header in _httpClient.DefaultRequestHeaders)
+            if (!string.IsNullOrEmpty(_customAuthorizationHeader.Value))
             {
-                _httpClient.DefaultRequestHeaders.Remove(header.Key);
+                HttpClient.DefaultRequestHeaders.Add(
+                    _customAuthorizationHeader.Key,
+                    _customAuthorizationHeader.Value);
             }
 
             if (DefaultHeaders != null)
             {
                 foreach (var pair in DefaultHeaders)
                 {
-                    //_httpClient.DefaultRequestHeaders.Remove(pair.Key);
-                    _httpClient.DefaultRequestHeaders.Add(pair.Key, pair.Value);
+                    // Can't add duplicate key.
+                    HttpClient.DefaultRequestHeaders.Remove(pair.Key);
+                    HttpClient.DefaultRequestHeaders.Add(pair.Key, pair.Value);
                 }
             }
 
-            return _httpClient;
+            return HttpClient;
         }
     }
 }
