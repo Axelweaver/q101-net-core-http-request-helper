@@ -38,16 +38,10 @@ namespace Q101.NetCoreHttpRequestHelper
         #endregion
 
         /// <inheritdoc />
-        public Dictionary<string, string> DefaultHeaders { get; set; }
-
-        /// <inheritdoc />
-        public Encoding DefaultEncoding { get; set; }
-
-        /// <inheritdoc />
         public HttpClient HttpClient { get; }
 
         /// <inheritdoc />
-        public bool UseCamelCase { get; set; }
+        public HttpRequestHelperOptions Options { get; }
 
         /// <inheritdoc />
         public IHttpContentSender<object> Json { get; }
@@ -68,9 +62,8 @@ namespace Q101.NetCoreHttpRequestHelper
             IJsonConverter jsonConverter,
             IXmlConverter xmlConverter)
         {
-            DefaultHeaders = new Dictionary<string, string>();
-            DefaultEncoding = Encoding.UTF8;
             HttpClient = httpClient;
+            Options = new HttpRequestHelperOptions();
 
             _jsonConverter = jsonConverter;
             _xmlConverter = xmlConverter;
@@ -78,24 +71,21 @@ namespace Q101.NetCoreHttpRequestHelper
             Json = new HttpContentSender<object>(
                 ConfigureHttpClient,
                 ContentTypes.Json,
-                DefaultEncoding,
-                UseCamelCase,
+                Options,
                 _jsonConverter,
                 _xmlConverter);
 
             Xml = new HttpContentSender<object>(
                 ConfigureHttpClient,
                 ContentTypes.Xml,
-                DefaultEncoding,
-                UseCamelCase,
+                Options,
                 _jsonConverter,
                 _xmlConverter);
 
             Stream = new HttpContentSender<Stream>(
                 ConfigureHttpClient,
                 ContentTypes.Stream,
-                DefaultEncoding,
-                UseCamelCase,
+                Options,
                 _jsonConverter,
                 _xmlConverter);
         }
@@ -147,14 +137,11 @@ namespace Q101.NetCoreHttpRequestHelper
                     _customAuthorizationHeader.Value);
             }
 
-            if (DefaultHeaders != null)
+            foreach (var pair in Options.DefaultHeaders)
             {
-                foreach (var pair in DefaultHeaders)
-                {
-                    // Can't add duplicate key.
-                    HttpClient.DefaultRequestHeaders.Remove(pair.Key);
-                    HttpClient.DefaultRequestHeaders.Add(pair.Key, pair.Value);
-                }
+                // Can't add duplicate key.
+                HttpClient.DefaultRequestHeaders.Remove(pair.Key);
+                HttpClient.DefaultRequestHeaders.Add(pair.Key, pair.Value);
             }
 
             return HttpClient;

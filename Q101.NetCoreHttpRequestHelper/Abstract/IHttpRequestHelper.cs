@@ -11,24 +11,14 @@ namespace Q101.NetCoreHttpRequestHelper
     public interface IHttpRequestHelper
     {
         /// <summary>
-        /// Headers added to requests by default.
-        /// </summary>
-        Dictionary<string, string> DefaultHeaders { get; set; }
-
-        /// <summary>
-        /// Requests encoding by default (UTF-8 if unset).
-        /// </summary>
-        public Encoding DefaultEncoding { get; set; }
-
-        /// <summary>
         /// HttpClient used by service.
         /// </summary>
         HttpClient HttpClient { get; }
 
         /// <summary>
-        /// Use camel case on serialization.
+        /// Helper request options.
         /// </summary>
-        bool UseCamelCase { get; set; }
+        HttpRequestHelperOptions Options { get; }
 
         /// <summary>
         /// Add Authorization header to requests.
