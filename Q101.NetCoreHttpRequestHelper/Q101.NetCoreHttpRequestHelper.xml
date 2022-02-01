@@ -1,0 +1,505 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Q101.NetCoreHttpRequestHelper</name>
+    </assembly>
+    <members>
+        <member name="T:Q101.NetCoreHttpRequestHelper.IHttpContentSender`1">
+            <summary>
+            HttpRequestHelper formatted content sender.
+            </summary>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.IHttpContentSender`1.GetAsync(System.String,`0,System.Collections.Generic.Dictionary{System.String,System.String},System.Text.Encoding,System.Boolean)">
+            <summary>
+            Execute GET request.
+            </summary>
+            <param name="url">Request URL.</param>
+            <param name="content">Request content.</param>
+            <param name="headers">Request additional headers.</param>
+            <param name="encoding">Request encoding (default UTF-8).</param>
+            <param name="ensureSuccess">Call HttpRequestMessage EnsureSuccesStatusCode after request.</param>
+            <returns>HttpClient response wrapper.</returns>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.IHttpContentSender`1.PostAsync(System.String,`0,System.Collections.Generic.Dictionary{System.String,System.String},System.Text.Encoding,System.Boolean)">
+            <summary>
+            Execute POST request.
+            </summary>
+            <param name="url">Request URL.</param>
+            <param name="content">Request content.</param>
+            <param name="headers">Request additional headers.</param>
+            <param name="encoding">Request encoding (default UTF-8).</param>
+            <param name="ensureSuccess">Call HttpRequestMessage EnsureSuccesStatusCode after request.</param>
+            <returns>HttpClient response wrapper.</returns>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.IHttpContentSender`1.PutAsync(System.String,`0,System.Collections.Generic.Dictionary{System.String,System.String},System.Text.Encoding,System.Boolean)">
+            <summary>
+            Execute PUT request.
+            </summary>
+            <param name="url">Request URL.</param>
+            <param name="content">Request content.</param>
+            <param name="headers">Request additional headers.</param>
+            <param name="encoding">Request encoding (default UTF-8).</param>
+            <param name="ensureSuccess">Call HttpRequestMessage EnsureSuccesStatusCode after request.</param>
+            <returns>HttpClient response wrapper.</returns>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.IHttpContentSender`1.DeleteAsync(System.String,`0,System.Collections.Generic.Dictionary{System.String,System.String},System.Text.Encoding,System.Boolean)">
+            <summary>
+            Execute DELETE request.
+            </summary>
+            <param name="url">Request URL.</param>
+            <param name="content">Request content.</param>
+            <param name="headers">Request additional headers.</param>
+            <param name="encoding">Request encoding (default UTF-8).</param>
+            <param name="ensureSuccess">Call HttpRequestMessage EnsureSuccesStatusCode after request.</param>
+            <returns>HttpClient response wrapper.</returns>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.IHttpContentSender`1.PatchAsync(System.String,`0,System.Collections.Generic.Dictionary{System.String,System.String},System.Text.Encoding,System.Boolean)">
+            <summary>
+            Execute PATCH request.
+            </summary>
+            <param name="url">Request URL.</param>
+            <param name="content">Request content.</param>
+            <param name="headers">Request additional headers.</param>
+            <param name="encoding">Request encoding (default UTF-8).</param>
+            <param name="ensureSuccess">Call HttpRequestMessage EnsureSuccesStatusCode after request.</param>
+            <returns>HttpClient response wrapper.</returns>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.IHttpContentSender`1.SendAsync(System.Net.Http.HttpMethod,System.String,`0,System.Collections.Generic.Dictionary{System.String,System.String},System.Text.Encoding,System.Boolean)">
+            <summary>
+            Send http request.
+            </summary>
+            <param name="method">Request method.</param>
+            <param name="url">Request URL.</param>
+            <param name="content">Request content.</param>
+            <param name="headers">Request additional headers.</param>
+            <param name="encoding">Request encoding (default UTF-8).</param>
+            <param name="ensureSuccess">Call HttpRequestMessage EnsureSuccesStatusCode after request.</param>
+            <returns>HttpClient response wrapper.</returns>
+        </member>
+        <member name="T:Q101.NetCoreHttpRequestHelper.IHttpRequestHelper">
+            <summary>
+            Http request sending helper.
+            </summary>
+        </member>
+        <member name="P:Q101.NetCoreHttpRequestHelper.IHttpRequestHelper.HttpClient">
+            <summary>
+            HttpClient used by service.
+            </summary>
+        </member>
+        <member name="P:Q101.NetCoreHttpRequestHelper.IHttpRequestHelper.Options">
+            <summary>
+            Helper request options.
+            </summary>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.IHttpRequestHelper.UseAuthorizationHeader(System.String)">
+            <summary>
+            Add Authorization header to requests.
+            </summary>
+            <param name="value">Header value.</param>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.IHttpRequestHelper.UseBasicAuthorizationHeader(System.String,System.String)">
+            <summary>
+            Add basic authorization header to requests.
+            </summary>
+            <param name="login">Basic auth login.</param>
+            <param name="password">Basic auth password.</param>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.IHttpRequestHelper.UseTokenAuthorizationHeader(System.String)">
+            <summary>
+            Add Token authorization header to requests.
+            </summary>
+            <param name="token">Token value.</param>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.IHttpRequestHelper.UseJwtTokenAuthorizationHeader(System.String)">
+            <summary>
+            Add Bearer token authorization header to requests.
+            </summary>
+            <param name="token">Bearer token value.</param>
+        </member>
+        <member name="P:Q101.NetCoreHttpRequestHelper.IHttpRequestHelper.Json">
+            <summary>
+            Send request using JSON object content.
+            </summary>
+        </member>
+        <member name="P:Q101.NetCoreHttpRequestHelper.IHttpRequestHelper.Xml">
+            <summary>
+            Send request using XML object content.
+            </summary>
+        </member>
+        <member name="P:Q101.NetCoreHttpRequestHelper.IHttpRequestHelper.Stream">
+            <summary>
+            Send request using stream content.
+            </summary>
+        </member>
+        <member name="P:Q101.NetCoreHttpRequestHelper.IHttpRequestHelper.FormData">
+            <summary>
+            Send request using multipart formdata content.
+            </summary>
+        </member>
+        <member name="T:Q101.NetCoreHttpRequestHelper.IHttpRequestHelperResponse">
+            <summary>
+            Http response message returned by client.
+            </summary>
+        </member>
+        <member name="P:Q101.NetCoreHttpRequestHelper.IHttpRequestHelperResponse.Response">
+            <summary>
+            HttpResponseMessage returned by client.
+            </summary>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.IHttpRequestHelperResponse.JsonAsync``1">
+            <summary>
+            Deserialize as JSON.
+            </summary>
+            <typeparam name="TResult">Result type.</typeparam>
+            <returns>Deserialized object of TResult.</returns>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.IHttpRequestHelperResponse.XmlAsync``1">
+            <summary>
+            Deserialize as XML.
+            </summary>
+            <typeparam name="TResult">Result type.</typeparam>
+            <returns>Deserialized object of TResult.</returns>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.IHttpRequestHelperResponse.StreamAsync">
+            <summary>
+            Get response as Stream.
+            </summary>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.IHttpRequestHelperResponse.StringAsync">
+            <summary>
+            Get response as string.
+            </summary>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.IHttpRequestHelperResponse.BytesAsync">
+            <summary>
+            Get response as byte array.
+            </summary>
+        </member>
+        <member name="T:Q101.NetCoreHttpRequestHelper.HttpContentSender`1">
+            <summary>
+            HttpRequestHelper formatted content sender.
+            </summary>
+        </member>
+        <member name="F:Q101.NetCoreHttpRequestHelper.HttpContentSender`1._httpClientProviderFunc">
+            <summary>
+            HttpClient instance.
+            </summary>
+        </member>
+        <member name="F:Q101.NetCoreHttpRequestHelper.HttpContentSender`1._contentType">
+            <summary>
+            Sender content type.
+            </summary>
+        </member>
+        <member name="F:Q101.NetCoreHttpRequestHelper.HttpContentSender`1._requestOptions">
+            <summary>
+            Helper request options.
+            </summary>
+        </member>
+        <member name="F:Q101.NetCoreHttpRequestHelper.HttpContentSender`1._jsonConverter">
+            <summary>
+            JSON converter.
+            </summary>
+        </member>
+        <member name="F:Q101.NetCoreHttpRequestHelper.HttpContentSender`1._xmlConverter">
+            <summary>
+            Xml converter.
+            </summary>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpContentSender`1.#ctor(System.Func{System.Net.Http.HttpClient},Q101.NetCoreHttpRequestHelper.ContentTypes,Q101.NetCoreHttpRequestHelper.HttpRequestHelperOptions,Q101.NetCoreHttpRequestHelper.Converters.IJsonConverter,Q101.NetCoreHttpRequestHelper.Converters.IXmlConverter)">
+            <summary>
+            HttpRequestHelper formatted content sender.
+            </summary>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpContentSender`1.GetAsync(System.String,`0,System.Collections.Generic.Dictionary{System.String,System.String},System.Text.Encoding,System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpContentSender`1.PostAsync(System.String,`0,System.Collections.Generic.Dictionary{System.String,System.String},System.Text.Encoding,System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpContentSender`1.PutAsync(System.String,`0,System.Collections.Generic.Dictionary{System.String,System.String},System.Text.Encoding,System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpContentSender`1.DeleteAsync(System.String,`0,System.Collections.Generic.Dictionary{System.String,System.String},System.Text.Encoding,System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpContentSender`1.PatchAsync(System.String,`0,System.Collections.Generic.Dictionary{System.String,System.String},System.Text.Encoding,System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpContentSender`1.SendAsync(System.Net.Http.HttpMethod,System.String,`0,System.Collections.Generic.Dictionary{System.String,System.String},System.Text.Encoding,System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpContentSender`1.GetRequestMessage(System.Net.Http.HttpMethod,System.String,`0,System.Collections.Generic.Dictionary{System.String,System.String},System.Text.Encoding)">
+            <summary>
+            Get HttpRequestMessage instance.
+            </summary>
+            <param name="method">Request method.</param>
+            <param name="url">Request URL.</param>
+            <param name="content">Request content.</param>
+            <param name="headers">Request additional headers.</param>
+            <param name="encoding">Request encoding (default UTF-8).</param>
+            <returns>Configured HttpRequestMessage.</returns>
+        </member>
+        <member name="T:Q101.NetCoreHttpRequestHelper.HttpRequestHelper">
+            <summary>
+            Http request sending helper.
+            </summary>
+        </member>
+        <member name="F:Q101.NetCoreHttpRequestHelper.HttpRequestHelper._jsonConverter">
+            <summary>
+            JSON converter.
+            </summary>
+        </member>
+        <member name="F:Q101.NetCoreHttpRequestHelper.HttpRequestHelper._xmlConverter">
+            <summary>
+            Xml converter.
+            </summary>
+        </member>
+        <member name="F:Q101.NetCoreHttpRequestHelper.HttpRequestHelper._authenticationHeader">
+            <summary>
+            Authentication header.
+            </summary>
+        </member>
+        <member name="F:Q101.NetCoreHttpRequestHelper.HttpRequestHelper._customAuthorizationHeader">
+            <summary>
+            Custom token Authentication header.
+            </summary>
+        </member>
+        <member name="P:Q101.NetCoreHttpRequestHelper.HttpRequestHelper.HttpClient">
+            <inheritdoc />
+        </member>
+        <member name="P:Q101.NetCoreHttpRequestHelper.HttpRequestHelper.Options">
+            <inheritdoc />
+        </member>
+        <member name="P:Q101.NetCoreHttpRequestHelper.HttpRequestHelper.Json">
+            <inheritdoc />
+        </member>
+        <member name="P:Q101.NetCoreHttpRequestHelper.HttpRequestHelper.Xml">
+            <inheritdoc />
+        </member>
+        <member name="P:Q101.NetCoreHttpRequestHelper.HttpRequestHelper.Stream">
+            <inheritdoc />
+        </member>
+        <member name="P:Q101.NetCoreHttpRequestHelper.HttpRequestHelper.FormData">
+            <inheritdoc />
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpRequestHelper.#ctor(System.Net.Http.HttpClient,Q101.NetCoreHttpRequestHelper.Converters.IJsonConverter,Q101.NetCoreHttpRequestHelper.Converters.IXmlConverter)">
+            <summary>
+            Http request sending helper.
+            </summary>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpRequestHelper.UseAuthorizationHeader(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpRequestHelper.UseBasicAuthorizationHeader(System.String,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpRequestHelper.UseTokenAuthorizationHeader(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpRequestHelper.UseJwtTokenAuthorizationHeader(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpRequestHelper.ConfigureHttpClient">
+            <summary>
+            Apply helper configuration to HttpClient.
+            </summary>
+        </member>
+        <member name="T:Q101.NetCoreHttpRequestHelper.HttpRequestHelperOptions">
+            <summary>
+            Helper request options.
+            </summary>
+        </member>
+        <member name="P:Q101.NetCoreHttpRequestHelper.HttpRequestHelperOptions.DefaultHeaders">
+            <summary>
+            Headers added to requests by default.
+            </summary>
+        </member>
+        <member name="P:Q101.NetCoreHttpRequestHelper.HttpRequestHelperOptions.DefaultEncoding">
+            <summary>
+            Requests encoding by default (UTF-8 if unset).
+            </summary>
+        </member>
+        <member name="P:Q101.NetCoreHttpRequestHelper.HttpRequestHelperOptions.UseCamelCase">
+            <summary>
+            Use camel case on serialization.
+            </summary>
+        </member>
+        <member name="T:Q101.NetCoreHttpRequestHelper.HttpRequestHelperResponse">
+            <summary>
+            HttpRequestHelper response wrapper.
+            </summary>
+        </member>
+        <member name="F:Q101.NetCoreHttpRequestHelper.HttpRequestHelperResponse._httpResponse">
+            <summary>
+            Reponse message returned by client.
+            </summary>
+        </member>
+        <member name="F:Q101.NetCoreHttpRequestHelper.HttpRequestHelperResponse._useCamelCase">
+            <summary>
+            Use camel case on deserialization.
+            </summary>
+        </member>
+        <member name="F:Q101.NetCoreHttpRequestHelper.HttpRequestHelperResponse._jsonConverter">
+            <summary>
+            JSON converter.
+            </summary>
+        </member>
+        <member name="F:Q101.NetCoreHttpRequestHelper.HttpRequestHelperResponse._xmlConverter">
+            <summary>
+            Xml converter.
+            </summary>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpRequestHelperResponse.#ctor(System.Net.Http.HttpResponseMessage,System.Boolean,Q101.NetCoreHttpRequestHelper.Converters.IJsonConverter,Q101.NetCoreHttpRequestHelper.Converters.IXmlConverter)">
+            <summary>
+            HttpRequestHelper response wrapper.
+            </summary>
+        </member>
+        <member name="P:Q101.NetCoreHttpRequestHelper.HttpRequestHelperResponse.Response">
+            <inheritdoc/>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpRequestHelperResponse.JsonAsync``1">
+            <inheritdoc/>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpRequestHelperResponse.XmlAsync``1">
+            <inheritdoc/>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpRequestHelperResponse.StreamAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpRequestHelperResponse.StringAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.HttpRequestHelperResponse.BytesAsync">
+            <inheritdoc/>
+        </member>
+        <member name="T:Q101.NetCoreHttpRequestHelper.Constants.ContentTypeStrings">
+            <summary>
+            Http content type string constants.
+            </summary>
+        </member>
+        <member name="T:Q101.NetCoreHttpRequestHelper.Converters.IJsonConverter">
+            <summary>
+            JSON converter.
+            </summary>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.Converters.IJsonConverter.Serialize``1(``0)">
+            <summary>
+            Serialize object to JSON string.
+            </summary>
+            <typeparam name="T">Object type.</typeparam>
+            <param name="obj">Object.</param>
+            <returns>Serialized JSON string.</returns>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.Converters.IJsonConverter.SerializeCamelCase``1(``0)">
+            <summary>
+            Serialize object to JSON camelCase string.
+            </summary>
+            <typeparam name="T">Object type.</typeparam>
+            <param name="obj">Object.</param>
+            <returns>Serialized JSON string.</returns>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.Converters.IJsonConverter.Deserialize``1(System.String)">
+            <summary>
+            Deserialize JSON string to type T.
+            </summary>
+            <typeparam name="T">Result type.</typeparam>
+            <param name="json">JSON string.</param>
+            <returns>Deserialized object.</returns>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.Converters.IJsonConverter.DeserializeCamelCase``1(System.String)">
+            <summary>
+            Deserialize JSON camelCase string to type T.
+            </summary>
+            <typeparam name="T">Result type.</typeparam>
+            <param name="json">JSON string.</param>
+            <returns>Deserialized object.</returns>
+        </member>
+        <member name="T:Q101.NetCoreHttpRequestHelper.Converters.IXmlConverter">
+            <summary>
+            Xml serialization converter.
+            </summary>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.Converters.IXmlConverter.Serialize``1(``0,System.Text.Encoding)">
+            <summary>
+            Serialize object to xml string.
+            </summary>
+            <typeparam name="T">Object type.</typeparam>
+            <param name="data">Object.</param>
+            <param name="encoding">Serialization encoding (UTF-8 by default).</param>
+            <returns>Serialized xml string.</returns>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.Converters.IXmlConverter.Deserialize``1(System.String)">
+            <summary>
+            Deserialize xml string to type T.
+            </summary>
+            <typeparam name="T">Result type.</typeparam>
+            <param name="xml">Xml string.</param>
+            <returns>Deserialized object.</returns>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.Converters.IXmlConverter.DeserializeWithLogging``1(System.String,System.Collections.Generic.List{System.String}@)">
+            <summary>
+            Deserialize string to object T type with xml node errors logging.
+            </summary>
+            <typeparam name="T">Result type.</typeparam>
+            <param name="xml">Xml string.</param>
+            <param name="errors">Errors list.</param>
+            <returns>Deserialized object.</returns>
+        </member>
+        <member name="T:Q101.NetCoreHttpRequestHelper.Converters.JsonConverter">
+            <summary>
+            JSON converter.
+            </summary>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.Converters.JsonConverter.Serialize``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.Converters.JsonConverter.SerializeCamelCase``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.Converters.JsonConverter.Deserialize``1(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.Converters.JsonConverter.DeserializeCamelCase``1(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="T:Q101.NetCoreHttpRequestHelper.Converters.XmlConverter">
+            <summary>
+            Xml serialization converter.
+            </summary>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.Converters.XmlConverter.Serialize``1(``0,System.Text.Encoding)">
+            <inheritdoc />
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.Converters.XmlConverter.Deserialize``1(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.Converters.XmlConverter.DeserializeWithLogging``1(System.String,System.Collections.Generic.List{System.String}@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.Converters.XmlConverter.Deserialize``1(System.Xml.Serialization.XmlSerializer,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.Converters.XmlConverter.GetInnerExceptionMessages(System.Exception,System.String)">
+            <summary>
+            Get combined error string for exception and inner exceptions.
+            </summary>
+        </member>
+        <member name="T:Q101.NetCoreHttpRequestHelper.ContentTypes">
+            <summary>
+            HttpRequestHelper content types.
+            </summary>
+        </member>
+        <member name="T:Q101.NetCoreHttpRequestHelper.ServiceCollectionExtensions">
+            <summary>
+            Service collection extensions.
+            </summary>
+        </member>
+        <member name="M:Q101.NetCoreHttpRequestHelper.ServiceCollectionExtensions.AddHttpRequestHelper(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Boolean)">
+            <summary>
+            Add IHttpRequestHelper dependencies to service collection.
+            </summary>
+            <param name="services">Service collection.</param>
+            <param name="disableSslCheck">Disable SSL check for helper requests.</param>
+        </member>
+    </members>
+</doc>

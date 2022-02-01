@@ -191,7 +191,11 @@ namespace Q101.NetCoreHttpRequestHelper
                     case ContentTypes.Stream:
                         {
                             requestMessage.Content = new StreamContent(content as Stream);
-
+                            break;
+                        }
+                    case ContentTypes.FormData:
+                        {
+                            requestMessage.Content = content as MultipartFormDataContent;
                             break;
                         }
                 }

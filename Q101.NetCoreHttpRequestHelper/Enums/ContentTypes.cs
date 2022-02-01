@@ -7,6 +7,7 @@
     {
         Json,
         Xml,
-        Stream
+        Stream,
+        FormData
     }
 }
