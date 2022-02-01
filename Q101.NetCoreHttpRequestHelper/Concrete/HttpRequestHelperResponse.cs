@@ -50,13 +50,10 @@ namespace Q101.NetCoreHttpRequestHelper
         }
 
         /// <inheritdoc/>
-        public async Task<HttpResponseMessage> Response()
-        {
-            return _httpResponse;
-        }
+        public HttpResponseMessage Response => _httpResponse;
 
         /// <inheritdoc/>
-        public async Task<TResult> Json<TResult>()
+        public async Task<TResult> JsonAsync<TResult>()
         {
             var content = await _httpResponse.Content.ReadAsStringAsync();
 
@@ -68,7 +65,7 @@ namespace Q101.NetCoreHttpRequestHelper
         }
 
         /// <inheritdoc/>
-        public async Task<TResult> Xml<TResult>()
+        public async Task<TResult> XmlAsync<TResult>()
         {
             var content = await _httpResponse.Content.ReadAsStringAsync();
 
@@ -78,7 +75,7 @@ namespace Q101.NetCoreHttpRequestHelper
         }
 
         /// <inheritdoc/>
-        public async Task<Stream> Stream()
+        public async Task<Stream> StreamAsync()
         {
             var stream = await _httpResponse.Content.ReadAsStreamAsync();
 
@@ -86,7 +83,15 @@ namespace Q101.NetCoreHttpRequestHelper
         }
 
         /// <inheritdoc/>
-        public async Task<byte[]> Bytes()
+        public async Task<string> StringAsync()
+        {
+            var str = await _httpResponse.Content.ReadAsStringAsync();
+
+            return str;
+        }
+
+        /// <inheritdoc/>
+        public async Task<byte[]> BytesAsync()
         {
             var bytes = await _httpResponse.Content.ReadAsByteArrayAsync();
 

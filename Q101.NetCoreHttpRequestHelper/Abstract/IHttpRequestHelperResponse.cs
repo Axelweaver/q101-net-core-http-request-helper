@@ -10,32 +10,37 @@ namespace Q101.NetCoreHttpRequestHelper
     public interface IHttpRequestHelperResponse
     {
         /// <summary>
-        /// Get HttpResponseMessage returned by client.
+        /// HttpResponseMessage returned by client.
         /// </summary>
-        Task<HttpResponseMessage> Response();
+        HttpResponseMessage Response { get; }
 
         /// <summary>
         /// Deserialize as JSON.
         /// </summary>
         /// <typeparam name="TResult">Result type.</typeparam>
         /// <returns>Deserialized object of TResult.</returns>
-        Task<TResult> Json<TResult>();
+        Task<TResult> JsonAsync<TResult>();
 
         /// <summary>
         /// Deserialize as XML.
         /// </summary>
         /// <typeparam name="TResult">Result type.</typeparam>
         /// <returns>Deserialized object of TResult.</returns>
-        Task<TResult> Xml<TResult>();
+        Task<TResult> XmlAsync<TResult>();
 
         /// <summary>
         /// Get response as Stream.
         /// </summary>
-        Task<Stream> Stream();
+        Task<Stream> StreamAsync();
+
+        /// <summary>
+        /// Get response as string.
+        /// </summary>
+        Task<string> StringAsync();
 
         /// <summary>
         /// Get response as byte array.
         /// </summary>
-        Task<byte[]> Bytes();
+        Task<byte[]> BytesAsync();
     }
 }

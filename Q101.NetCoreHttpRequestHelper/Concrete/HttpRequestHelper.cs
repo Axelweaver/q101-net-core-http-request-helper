@@ -52,6 +52,9 @@ namespace Q101.NetCoreHttpRequestHelper
         /// <inheritdoc />
         public IHttpContentSender<Stream> Stream { get; }
 
+        /// <inheritdoc />
+        public IHttpContentSender<MultipartFormDataContent> FormData { get; }
+
         #region constructor
 
         /// <summary>
@@ -85,6 +88,13 @@ namespace Q101.NetCoreHttpRequestHelper
             Stream = new HttpContentSender<Stream>(
                 ConfigureHttpClient,
                 ContentTypes.Stream,
+                Options,
+                _jsonConverter,
+                _xmlConverter);
+
+            FormData = new HttpContentSender<MultipartFormDataContent>(
+                ConfigureHttpClient,
+                ContentTypes.FormData,
                 Options,
                 _jsonConverter,
                 _xmlConverter);
