@@ -140,8 +140,12 @@ namespace Q101.NetCoreHttpRequestHelper
                 HttpClient.DefaultRequestHeaders.Authorization = _authenticationHeader;
             }
 
-            if (!string.IsNullOrEmpty(_customAuthorizationHeader.Value))
+            if (!string.IsNullOrEmpty(_customAuthorizationHeader.Value)
+                && HttpClient.DefaultRequestHeaders.Authorization == null)
             {
+                HttpClient.DefaultRequestHeaders.Remove(
+                    _customAuthorizationHeader.Key);
+
                 HttpClient.DefaultRequestHeaders.Add(
                     _customAuthorizationHeader.Key,
                     _customAuthorizationHeader.Value);
