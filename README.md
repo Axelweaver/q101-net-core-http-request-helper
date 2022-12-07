@@ -8,6 +8,6 @@
  To install this assembly (class library) on the package manager console tab, run the following command:
 ```bash
 
-Install-Package Q101.NetCoreHttpRequestHelper -Version 1.0.0
+Install-Package Q101.NetCoreHttpRequestHelper -Version 1.0.6
 
 ```
